@@ -2,23 +2,23 @@ import React, { useContext } from 'react'
 import { Logincontext } from '../context/Contextprovider';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { url } from '../../baseurl';
 
 const Option = ({ deletedata, get }) => {
     // console.log(deletedata);
 
     const { account, setAccount } = useContext(Logincontext);
     // console.log(account);
-
+    const userId=JSON.parse(localStorage.getItem("user"))._id
     const removedata = async (id) => {
         try {
-            const res = await fetch(`remove/${id}`, {
-                method: "GET",
+            const res = await fetch(`${url}/remove/${id}/${userId}/`, {
+                method: "POST",
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json"
                 },
-                credentials: "include"
+                credentials:"same-origin"
             });
 
             const data = await res.json();

@@ -3,10 +3,10 @@ import { NavLink } from 'react-router-dom';
 import { Logincontext } from '../context/Contextprovider';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-
+import { url } from '../../baseurl';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom';
 const Sign_in = () => {
-
+    const history=useHistory();
     const { account, setAccount } = useContext(Logincontext);
 
     const [logdata, setData] = useState({
@@ -34,20 +34,20 @@ const Sign_in = () => {
         const { email, password } = logdata;
         // console.log(email);
         try {
-            const res = await fetch("/login", {
+            const res = await fetch(`${url}/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     email, password
-                })
+                }),
+                credentials:"same-origin"
             });
 
 
             const data = await res.json();
             // console.log(data);
-
             if (res.status === 400 || !data) {
                 console.log("invalid details");
                 toast.error("Invalid Details 👎!", {
@@ -59,6 +59,8 @@ const Sign_in = () => {
                 toast.success("Login Successfully done 😃!", {
                     position: "top-center"
                 });
+                localStorage.setItem("user",JSON.stringify(data))
+                history.push('/')
             }
         } catch (error) {
             console.log("login page ka error" + error.message);

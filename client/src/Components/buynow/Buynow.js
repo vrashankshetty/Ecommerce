@@ -5,24 +5,24 @@ import Empty from './Empty';
 import Option from './Option';
 import Right from './Right';
 import Subtotal from './Subtotal';
-
+import { url } from '../../baseurl';
 const Buynow = () => {
 
     const [cartdata, setCartdata] = useState("");
     // console.log(cartdata.length);
-
+    const userId=JSON.parse(localStorage.getItem("user"))._id
     const getdatabuy = async () => {
-        const res = await fetch("/cartdetails", {
+        const res = await fetch(`${url}/cartdetails/${userId}`, {
             method: "GET",
             headers: {
                 Accept:"application/json",
                 "Content-Type": "application/json"
             },
-            credentials:"include"
+            credentials:"same-origin"
         });
 
         const data = await res.json();
-        // console.log(data.carts);
+        console.log(data.carts);
 
         if (res.status !== 201) {
             alert("no data available")

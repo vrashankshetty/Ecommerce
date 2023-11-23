@@ -4,9 +4,10 @@ import { NavLink } from 'react-router-dom';
 import "./signup.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { url } from '../../baseurl';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 const Signup = () => {
-
+   const history=useHistory();
     const [udata, setUdata] = useState({
         fname: "",
         email: "",
@@ -34,7 +35,7 @@ const Signup = () => {
 
         const { fname, email, mobile, password, cpassword } = udata;
         try {
-            const res = await fetch("/register", {
+            const res = await fetch(`${url}/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -59,6 +60,7 @@ const Signup = () => {
                 toast.success("Registration Successfully done 😃!", {
                     position: "top-center"
                 });
+                history.push('/login')
             }
         } catch (error) {
             console.log("front end ka catch error hai" + error.message);

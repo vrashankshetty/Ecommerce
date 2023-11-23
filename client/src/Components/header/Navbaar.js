@@ -60,57 +60,37 @@ const Navbaar = () => {
 
     const { account, setAccount } = useContext(Logincontext);
 
-    const getdetailsvaliduser = async () => {
-        const res = await fetch("/validuser", {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            credentials: "include"
-        });
+    // const getdetailsvaliduser = async () => {
+    //     const res = await fetch(`${url}/validuser`, {
+    //         method: "GET",
+    //         headers: {
+    //             Accept: "application/json",
+    //             "Content-Type": "application/json"
+    //         },
+    //         credentials: "include"
+    //     });
 
-        const data = await res.json();
-        // console.log(data);
+    //     const data = await res.json();
+    //     // console.log(data);
 
-        if (res.status !== 201) {
-            console.log("first login");
-        } else {
-            // console.log("cart add ho gya hain");
-            setAccount(data);
-        }
-    }
+    //     if (res.status !== 201) {
+    //         console.log("first login");
+    //     } else {
+    //         // console.log("cart add ho gya hain");
+    //         setAccount(data);
+    //     }
+    // }
 
-    useEffect(() => {
-        getdetailsvaliduser();
-    }, []);
+    // useEffect(() => {
+    //     getdetailsvaliduser();
+    // }, []);
 
 
     // for logout
     const logoutuser = async () => {
-        const res2 = await fetch("/logout", {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            credentials: "include"
-        });
-
-        const data2 = await res2.json();
-        // console.log(data2);
-
-        if (!res2.status === 201) {
-            const error = new Error(res2.error);
-            throw error;
-        } else {
-            setAccount(false);
-            setOpen(false)
-            toast.success("user Logout 😃!", {
-                position: "top-center"
-            });
-            history.push("/");
-        }
+        setAccount({});
+        localStorage.removeItem("user")
+        history.push('/')
     }
 
     // for drawer
@@ -173,7 +153,7 @@ const Navbaar = () => {
                     {
                         account ? <NavLink to="/buynow">
                             <div className="cart_btn">
-                                <Badge badgeContent={account.carts.length} color="secondary">
+                                <Badge badgeContent={account.carts?.length} color="secondary">
                                     <i className="fas fa-shopping-cart" id="icon"></i>
                                 </Badge>
 
@@ -205,7 +185,10 @@ const Navbaar = () => {
                             className={classes.component}
                         >
                             <MenuItem onClick={handleClose} style={{ margin: 10 }}>My account</MenuItem>
-                            {account ? <MenuItem onClick={handleClose} style={{ margin: 10 }} onClick={logoutuser}><LogoutIcon style={{ fontSize: 16, marginRight: 3 }} />   Logout</MenuItem> : ""}
+                            {account ? <MenuItem onClick={handleClose} style={{ margin: 10 }}><LogoutIcon style={{ fontSize: 16, marginRight: 3 }} />  
+                            <div onClick={logoutuser}>
+                            Logout
+                            </div></MenuItem> : ""}
                         </Menu>
                     </div>
                     <ToastContainer />

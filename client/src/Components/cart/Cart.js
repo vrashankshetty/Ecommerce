@@ -5,7 +5,7 @@ import { Divider } from '@mui/material';
 import { useHistory, useParams } from 'react-router';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Logincontext } from "../context/Contextprovider";
-
+import { url } from '../../baseurl';
 const Cart = () => {
 
     const { account, setAccount } = useContext(Logincontext);
@@ -14,22 +14,22 @@ const Cart = () => {
 
 
     const { id } = useParams("");
-    // console.log(id);
-
+    console.log(id);
+ 
     const history = useHistory();
 
     const [inddata, setIndedata] = useState("");
 
-    // console.log([inddata]);
+    console.log(inddata);
 
     const getinddata = async () => {
-        const res = await fetch(`/getproductsone/${id}`, {
+        const res = await fetch(`${url}/getproductsone/${id}`, {
             method: "GET",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json"
             },
-            credentials: "include"
+           credentials:"same-origin"
         });
 
         const data = await res.json();
@@ -49,16 +49,16 @@ const Cart = () => {
 
     const addtocart = async (id) => {
         console.log(id);
-        const check = await fetch(`/addcart/${id}`, {
+        const check = await fetch(`${url}/addcart/${id}`, {
             method: "POST",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                inddata
+                userID:JSON.parse(localStorage.getItem("user"))._id
             }),
-            credentials: "include"
+            credentials:"same-origin"
         });
         // console.log(check);
         const data1 = await check.json();

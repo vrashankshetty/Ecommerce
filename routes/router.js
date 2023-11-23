@@ -87,12 +87,7 @@ router.post("/login", async (req, res) => {
             } else {
                 
                 const token = await userlogin.generatAuthtoken();
-                console.log(token);
-
-                res.cookie("eccomerce", token, {
-                    expires: new Date(Date.now() + 2589000),
-                    httpOnly: true
-                });
+                console.log(token)
                 res.status(201).json(userlogin);
             }
 
@@ -111,12 +106,12 @@ router.post("/login", async (req, res) => {
 router.get("/getproductsone/:id", async (req, res) => {
 
     try {
-        const { id } = req.params;
+        const id = req.params.id;
         console.log(id);
-
+      
         const individual = await products.findOne({ id: id });
-        console.log(individual + "ind mila hai");
-
+        console.log("productonedata",individual + "ind mila hai");
+        
         res.status(201).json(individual);
     } catch (error) {
         res.status(400).json(error);
@@ -125,21 +120,19 @@ router.get("/getproductsone/:id", async (req, res) => {
 
 
 // adding the data into cart
-router.post("/addcart/:id", authenicate, async (req, res) => {
-
+router.post("/addcart/:id", async (req, res) => {
     try {
         console.log("perfect 6");
         const { id } = req.params;
         const cart = await products.findOne({ id: id });
         console.log(cart + "cart milta hain");
 
-        const Usercontact = await User.findOne({ _id: req.userID });
+        const Usercontact = await User.findOne({ _id: req.body.userID });
         console.log(Usercontact + "user milta hain");
 
 
         if (Usercontact) {
             const cartData = await Usercontact.addcartdata(cart);
-
             await Usercontact.save();
             console.log(cartData + " thse save wait kr");
             console.log(Usercontact + "userjode save");
@@ -152,9 +145,9 @@ router.post("/addcart/:id", authenicate, async (req, res) => {
 
 
 // get data into the cart
-router.get("/cartdetails", authenicate, async (req, res) => {
+router.get("/cartdetails/:id", async (req, res) => {
     try {
-        const buyuser = await User.findOne({ _id: req.userID });
+        const buyuser = await User.findOne({ _id: req.params.id });
         console.log(buyuser + "user hain buy pr");
         res.status(201).json(buyuser);
     } catch (error) {
@@ -165,15 +158,15 @@ router.get("/cartdetails", authenicate, async (req, res) => {
 
 
 // get user is login or not
-router.get("/validuser", authenicate, async (req, res) => {
-    try {
-        const validuserone = await User.findOne({ _id: req.userID });
-        console.log(validuserone + "user hain home k header main pr");
-        res.status(201).json(validuserone);
-    } catch (error) {
-        console.log(error + "error for valid user");
-    }
-});
+// router.get("/validuser", authenicate, async (req, res) => {
+//     try {
+//         const validuserone = await User.findOne({ _id: req.userID });
+//         console.log(validuserone + "user hain home k header main pr");
+//         res.status(201).json(validuserone);
+//     } catch (error) {
+//         console.log(error + "error for valid user");
+//     }
+// });
 
 // for userlogout
 
@@ -182,8 +175,6 @@ router.get("/logout", authenicate, async (req, res) => {
         req.rootUser.tokens = req.rootUser.tokens.filter((curelem) => {
             return curelem.token !== req.token
         });
-
-        res.clearCookie("eccomerce", { path: "/" });
         req.rootUser.save();
         res.status(201).json(req.rootUser.tokens);
         console.log("user logout");
@@ -196,17 +187,23 @@ router.get("/logout", authenicate, async (req, res) => {
 // item remove ho rhi hain lekin api delete use krna batter hoga
 // remove iteam from the cart
 
-router.get("/remove/:id", authenicate, async (req, res) => {
+router.post("/remove/:id/:userId", async (req, res) => {
     try {
-        const { id } = req.params;
-
-        req.rootUser.carts = req.rootUser.carts.filter((curel) => {
-            return curel.id != id
-        });
-
-        req.rootUser.save();
-        res.status(201).json(req.rootUser);
-        console.log("iteam remove");
+        const { id,userId } = req.params;
+        const user=await User.findOne({_id:userId})
+        let st=0;
+        let arr=[]
+        user.carts.forEach((s)=>{
+           if(s.id!=id || st){
+               arr.push(s)
+           }else{
+               st=1; 
+           }
+        })
+        user.carts=arr;
+        await User.findByIdAndUpdate(userId,{carts:user.carts})
+        res.status(201).json(user);
+        console.log("item remove");
 
     } catch (error) {
         console.log(error + "jwt provide then remove");

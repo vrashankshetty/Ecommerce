@@ -36,11 +36,11 @@ const Rightheader = ({ userlog ,logclose}) => {
                 {
                     account ?
                         <Avatar className="avtar2"
-                             title={account.fname.toUpperCase()}>{account.fname[0].toUpperCase()}</Avatar> :
+                             title={account?.fname.toUpperCase()}>{account.fname[0].toUpperCase()}</Avatar> :
                         <Avatar className="avtar"
                      />
                 }
-                {account ? <h3>Hello, {account.fname.toUpperCase()}</h3> : ""}
+                {account ? <h3>Hello, {account?.fname.toUpperCase()}</h3> : ""}
             </div>
             <div className="nav_btn" onClick={()=>logclose()}>
                 <NavLink to="/">Home</NavLink>
