@@ -134,8 +134,8 @@ const Navbaar = () => {
                             text &&
                             <List className="extrasearch" hidden={liopen}>
                                 {
-                                    products.filter(product => product.title.longTitle.toLowerCase().includes(text.toLowerCase())).map(product => (
-                                        <ListItem>
+                                    products.filter(product => product.title.longTitle.toLowerCase().includes(text.toLowerCase())).map((product,i) => (
+                                        <ListItem key={i}>
                                             <NavLink to={`/getproductsone/${product.id}`} onClick={() => setLiopen(true)}>
                                                 {product.title.longTitle}
                                             </NavLink>
@@ -153,7 +153,7 @@ const Navbaar = () => {
                     {
                         account ? <NavLink to="/buynow">
                             <div className="cart_btn">
-                                <Badge badgeContent={account.carts?.length} color="secondary">
+                                <Badge badgeContent={account?.carts?.length} color="secondary">
                                     <i className="fas fa-shopping-cart" id="icon"></i>
                                 </Badge>
 
@@ -172,7 +172,7 @@ const Navbaar = () => {
                     {
                         account ?
                             <Avatar className="avtar2"
-                                onClick={handleClick} title={account.fname.toUpperCase()}>{account.fname[0].toUpperCase()}</Avatar> :
+                                onClick={handleClick} title={account?.fname?.toUpperCase()}>{account?.fname[0]?.toUpperCase()}</Avatar> :
                             <Avatar className="avtar"
                                 onClick={handleClick} />
                     }

@@ -9,19 +9,28 @@ const Right = ({ iteam }) => {
     const [val, setVal] = useState(false);
 
     const [price, setPrice] = useState(0);
-
+   const [totalitems,setTotalitems]=useState(0);
     const history = useHistory("");
 
     useEffect(() => {
         totalAmount();
+        totalItemsfun();
     }, [iteam]);
 
     const totalAmount = () => {
         let price = 0
         iteam.map((item) => {
-            price += item.price.cost
+            price += item.price.cost*item.quantity
         });
         setPrice(price)
+    }
+
+    const totalItemsfun = () => {
+        let items= 0
+        iteam.map((item) => {
+            items+=item.quantity
+        });
+        setTotalitems(items)
     }
 
     const proceesby = ()=>{
@@ -35,7 +44,7 @@ const Right = ({ iteam }) => {
             <div className="cost_right">
                 <p>Your order is eligible for FREE Delivery. <br />
                     <span style={{ color: "#565959" }}> Select this option at checkout. Details</span></p>
-                <h3>Subtotal ({iteam.length} items): <span style={{ fontWeight: "700" }}> ₹{price}.00</span></h3>
+                <h3>Subtotal ({totalitems} items): <span style={{ fontWeight: "700" }}> ₹{price}.00</span></h3>
                 <button className="rightbuy_btn" onClick={proceesby} >Proceed to Buy</button>
                 <div className="emi" onClick={() => setVal(!val)}>
                     Emi available

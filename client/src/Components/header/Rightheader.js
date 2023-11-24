@@ -36,7 +36,7 @@ const Rightheader = ({ userlog ,logclose}) => {
                 {
                     account ?
                         <Avatar className="avtar2"
-                             title={account?.fname.toUpperCase()}>{account.fname[0].toUpperCase()}</Avatar> :
+                             title={account?.fname?.toUpperCase()}>{account?.fname[0].toUpperCase()}</Avatar> :
                         <Avatar className="avtar"
                      />
                 }

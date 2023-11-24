@@ -73,12 +73,34 @@ userSchema.methods.generatAuthtoken = async function(){
 
 // addto cart data
 userSchema.methods.addcartdata = async function(cart){
+    let arr=[]
     try {
-        this.carts = this.carts.concat(cart);
+        if (this.carts.length === 0) {
+            this.carts = this.carts.concat({ ...cart._doc, quantity: 1 });
+        } else {
+            let found = false;
+    
+            this.carts = this.carts.map((s) => {
+                if (s.id === cart.id) {
+                    found = true;
+                    console.log("Item already in cart. Updating quantity.");
+                    return { ...s, quantity: s.quantity + 1 };
+                } else {
+                    return s;
+                }
+            });
+    
+            if (!found) {
+                console.log("Item not in cart. Adding to cart.");
+                this.carts.push({ ...cart._doc, quantity: 1 });
+            }
+        }
+    
+        console.log("Cart data updated", this.carts);
         await this.save();
         return this.carts;
     } catch (error) {
-        console.log(error + "bhai cart add time aai error");
+        console.error("Error during cart update:", error);
     }
 }
 

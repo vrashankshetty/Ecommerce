@@ -22,13 +22,13 @@ const Buynow = () => {
         });
 
         const data = await res.json();
-        console.log(data.carts);
+        console.log(data?.carts);
 
         if (res.status !== 201) {
             alert("no data available")
         } else {
             // console.log("data cart main hain");
-            setCartdata(data.carts);
+            setCartdata(data?.carts);
         }
     };
 
@@ -56,7 +56,7 @@ const Buynow = () => {
 
     return (
         <>
-            {cartdata.length ?
+            {cartdata?.length ?
                 <div className="buynow_section">
                     <div className="buynow_container">
                         <div className="left_buy">
@@ -66,7 +66,7 @@ const Buynow = () => {
                             <Divider />
 
                             {
-                                cartdata.map((e, ind) => {
+                                cartdata?.map((e, ind) => {
                                     return (
                                         <>
                                             <div className="item_containert" key={ind}>
@@ -78,7 +78,7 @@ const Buynow = () => {
                                                     <p className="unusuall">Usually dispatched in 8 days.</p>
                                                     <p>Eligible for FREE Shipping</p>
                                                     <img src="https://m.media-amazon.com/images/G/31/marketing/fba/fba-badge_18px-2x._CB485942108_.png" alt="logo" />
-                                                    <Option deletedata={e.id} get={getdatabuy} />
+                                                    <Option deletedata={e.id} get={getdatabuy} proddata={e}/>
                                                 </div>
                                                 <h3 className="item_price">₹{e.price.cost}.00</h3>
                                             </div>

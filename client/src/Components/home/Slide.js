@@ -48,9 +48,9 @@ const Slide = ({ title, products }) => {
                 containerClass="carousel-container"
             >
                 {
-                    products?.map((e) => {
+                    products?.map((e,i) => {
                         return (
-                            <NavLink to={`/getproductsone/${e.id}`}>
+                            <NavLink to={`/getproductsone/${e.id}`} key={i}>
                                 <div className="products_items">
                                     <div className="product_img">
                                         <img src={e.url} alt="product" />

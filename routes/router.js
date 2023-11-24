@@ -129,8 +129,6 @@ router.post("/addcart/:id", async (req, res) => {
 
         const Usercontact = await User.findOne({ _id: req.body.userID });
         console.log(Usercontact + "user milta hain");
-
-
         if (Usercontact) {
             const cartData = await Usercontact.addcartdata(cart);
             await Usercontact.save();
@@ -142,6 +140,34 @@ router.post("/addcart/:id", async (req, res) => {
         console.log(error);
     }
 });
+
+router.post("/addquantity/:id/:userId", async (req, res) => {
+    try {
+        console.log("perfect 6");
+        const { id } = req.params;
+        const userId=req.params.userId
+        const Usercontact = await User.findOne({ _id:userId });
+        console.log(Usercontact + "user milta hain");
+       
+        if (Usercontact) {
+            let arr=[]
+            const cartData = await Usercontact.carts;
+            cartData.forEach((s)=>{
+                 if(s.id==id){
+                    arr.push({...s,quantity:req.body.quantity})
+                 }else{
+                    arr.push(s)
+                 }
+            })
+            await User.findByIdAndUpdate(userId,{carts:arr})
+            res.status(201).json(Usercontact);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+
 
 
 // get data into the cart
